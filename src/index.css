@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.active{
+  background-color: rgb(26 86 219 / var(--tw-text-opacity, 1));
+}
+.slick-prev, .slick-next {
+    display: none !important;
+}
+/* .loderscreen{
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+} */
