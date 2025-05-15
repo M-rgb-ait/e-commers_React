@@ -73,6 +73,7 @@ function App() {
 <AuthContextprovider>
 
 <WishlistContextProvider>
+  
   <CartContextProvider>
 
 

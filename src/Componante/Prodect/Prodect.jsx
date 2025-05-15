@@ -7,11 +7,12 @@ import LoderScreen from "../LoderScreen/LoderScreen";
 import { Link } from "react-router-dom";
 // import ReactPaginate from "react-paginate";
 import { WishlistContext } from "../../Context/WishlistContext";
+// import ReactPaginate from "react-paginate";
 
 
 export default function Home() {
   const [sort, setSort] = useState('title');
-  //  const [page, setpage] = useState(1);
+   const [currpage, setcurrpage] = useState(1);
    const [allprodect, setallprodect] = useState({});
  const [isLoading, setLodersceen] = useState(false);
 
@@ -56,9 +57,10 @@ console.log('whishlist',whishlist);
   setLodersceen(true);
     let {data} = await axios.get('https://ecommerce.routemisr.com/api/v1/products',{
     params:{
-      // limit:20,
-      // page:page,
-      sort,
+      limit:30,
+      page:currpage,
+      sort
+      
     }})
     setallprodect(data);
     setLodersceen(false);
@@ -66,7 +68,7 @@ console.log('whishlist',whishlist);
 
 useEffect(()=>{
   Apiprodect();
-},[sort])
+},[currpage,sort])
 
   // function Apiprodect2() {
   //   return axios.get('https://ecommerce.routemisr.com/api/v1/products');
@@ -173,19 +175,14 @@ useEffect(()=>{
       )}
 
       
-      </div>
+      </div >
+      
     
       </div>
-      {/* <ReactPaginate
-      previousLabel={<i className="fa-solid fa-backward"></i>}
-      previousClassName="text-green-700 text-xl"
-      activeClassName="text-green-700"
-      nextLabel={<i className="fa-solid fa-forward"></i>}
-      nextClassName="flex justify-center my-10 gap-5 text-xl"
-      // pageCount={allprodect.metadata.numberOfPages}
-      onPageChange={handelpage}
-      forcePage={page-1}
-      /> */}
+      <div className="text-center mt-32 mb-6">
+      {[1,2].map((item)=><button key={item} onClick={()=>setcurrpage(item)} className={`px-2 py-2 ${currpage==item?"bg-green-400":null}  border border-green-400`}>{item}</button>)}
+      </div>
+     
     </>
 
   )
