@@ -23,24 +23,6 @@ export default function Wishlist() {
 
   return (
     <>
-      {/* <div className="container p-10 mt-20">
-    <h2 className="text-green-500 font-bold text-center text-3xl">favourites</h2>
-    <div className="grid xl:grid-cols-6 lg:grid-cols-5  md:grid-cols-3 sm:grid-cols-2 gap-4">
-      {whishlist.length === 0 && <p>no favourites.....</p>}
-      {whishlist.map((item) => <div key={item._id}>
-      <img src={item.imageCover} alt={item.title} className="w-full h-full" />
-
-          <h3>title:{item.title}</h3>
-          <h3>sold:{item.sold}</h3>
-          <h3>price:{item.price} EGP</h3>
-          <p><i className="fa-solid fa-star text-yellow-400"></i> {item.ratingsAverage}</p>
-          <button className=" text-3x1 p-2 text-red-600 bg-red-300 border border-red-500 rounded-md dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" 
-          onClick={() => removeFromewhishlist(item._id)}>clear form favourites</button>
-      </div>)}
-
-    </div>
-  </div> */}
-
       <div className="container mx-auto p-4 mt-10">
         <h2 className="text-green-500 font-bold text-center text-4xl mt-7 mb-7">
           favourites

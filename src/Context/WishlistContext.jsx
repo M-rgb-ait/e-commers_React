@@ -39,7 +39,6 @@ export default function WishlistContextProvider({ children }) {
       console.log(erro);
     }
   };
-
   const removeFromewhishlist = async (productId) => {
     try {
       await axios.delete(

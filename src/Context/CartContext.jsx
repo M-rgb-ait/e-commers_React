@@ -100,7 +100,6 @@ export default function CartContextProvider({ children }) {
       });
     return res;
   }
-
   async function RemovElementFromCart(id) {
     const res = await axios
       .delete(`https://ecommerce.routemisr.com/api/v1/cart/${id}`, {

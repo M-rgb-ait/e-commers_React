@@ -9,75 +9,87 @@ import toast from "react-hot-toast";
 
 export default function ProdectDetails() {
   const [curentimg, setcurentimg] = useState(null);
-const {id} = useParams();
-const {addprodectcart} = useContext(cartContext);
-//   const {
-//     addwhishlist,
-//     removeFromewhishlist,
-//     isinwhishlist,
-// } =useContext(WishlistContext);
-
+  const { id } = useParams();
+  const { addprodectcart } = useContext(cartContext);
+  //   const {
+  //     addwhishlist,
+  //     removeFromewhishlist,
+  //     isinwhishlist,
+  // } =useContext(WishlistContext);
 
   function Apiprodectid() {
     return axios.get(`https://ecommerce.routemisr.com/api/v1/products/${id}`);
   }
 
-
-  const {data, isLoading, isErrer} = useQuery({
-    queryKey: ['prodectDetails', id],
+  const { data, isLoading, isErrer } = useQuery({
+    queryKey: ["prodectDetails", id],
     queryFn: Apiprodectid,
   });
 
-
   async function handelAddtocart() {
-    const res= await addprodectcart(id);
+    const res = await addprodectcart(id);
     //display maseges==this
     if (res) {
       // console.log('scsses');
-      toast.success('success', {duration: 3000, position: 'top-right'});
-    }else{
+      toast.success("success", { duration: 3000, position: "top-right" });
+    } else {
       // console.log('error');
-      toast.error('error', {duration: 3000, position: 'top-right'});
+      toast.error("error", { duration: 3000, position: "top-right" });
     }
   }
 
-  const ProdectDetailsobj=data?.data.data;
-  useEffect(function(){
-    setcurentimg(ProdectDetailsobj?.imageCover)
-
-  },[ProdectDetailsobj])
-  
+  const ProdectDetailsobj = data?.data.data;
+  useEffect(
+    function () {
+      setcurentimg(ProdectDetailsobj?.imageCover);
+    },
+    [ProdectDetailsobj]
+  );
 
   if (isLoading) {
-    return <LoderScreen/>
+    return <LoderScreen />;
   }
   if (isErrer) {
-    return <h1>link go to home</h1>
+    return <h1>link go to home</h1>;
   }
   return (
     <>
-    <div className=" container mx-auto mt-24">
-      <div className=" grid sm:grid-cols-4">
-        <div className="col-span-1">
-          <img src={curentimg} className="w-full mb-6" alt={ProdectDetailsobj.title} />
-          
-        </div>
-        <div className="col-span-3">
-          <h1> {ProdectDetailsobj.title} </h1>
-          <p> {ProdectDetailsobj.description} </p>
-          <h5>price: {ProdectDetailsobj.price} </h5>
-          <button onClick={handelAddtocart} className=" bg-green-700 py-2 rounded-lg w-full cursor-pointer">+add cart</button>
-        </div>
-       
-    {/* <button className=" text-xl" onClick={() => {isfavouret?removeFromewhishlist(ProdectDetailsobj._id) : addwhishlist(ProdectDetailsobj)}}>
+      <div className=" container mx-auto mt-24">
+        <div className=" grid sm:grid-cols-4">
+          <div className="col-span-1">
+            <img
+              src={curentimg}
+              className="w-full mb-6"
+              alt={ProdectDetailsobj.title}
+            />
+          </div>
+          <div className="col-span-3">
+            <h1> {ProdectDetailsobj.title} </h1>
+            <p> {ProdectDetailsobj.description} </p>
+            <h5>price: {ProdectDetailsobj.price} </h5>
+            <button
+              onClick={handelAddtocart}
+              className=" bg-green-700 py-2 rounded-lg w-full cursor-pointer"
+            >
+              +add cart
+            </button>
+          </div>
+
+          {/* <button className=" text-xl" onClick={() => {isfavouret?removeFromewhishlist(ProdectDetailsobj._id) : addwhishlist(ProdectDetailsobj)}}>
       <i className={`fas fa-heart ${isfavouret? 'text-red-500' : 'text-gray-950'}`}></i>
     </button> */}
+        </div>
+        <div className="flex  flex-wrap  gap-4">
+          {ProdectDetailsobj?.images.map((item) => (
+            <img
+              className="w-56"
+              onClick={() => setcurentimg(item)}
+              key={item}
+              src={item}
+            />
+          ))}
+        </div>
       </div>
-      <div className="flex  flex-wrap  gap-4">
-            {ProdectDetailsobj?.images.map((item) => <img className="w-56" onClick={()=>setcurentimg(item)} key={item} src={item} />
-            )}
-          </div>
-    </div>
     </>
-  )
+  );
 }

@@ -1,9 +1,7 @@
-
 export default function Notfond() {
   return (
-<>
-<h3>Notfond</h3>
-
-</>
-  )
+    <>
+      <h3>Notfond</h3>
+    </>
+  );
 }
