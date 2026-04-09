@@ -30,7 +30,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} FreshCart All rights reserved.
+        © {new Date().getFullYear()} FreshCart All rights reserved .
       </div>
     </footer>
   );
