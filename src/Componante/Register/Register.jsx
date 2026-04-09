@@ -1,322 +1,213 @@
-// import axios from "axios";
+import { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
-import { ColorRing } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [ErrorMassegs, setErrorMassegs] = useState(null);
-  const [issuccess, setissuccess] = useState(false);
-  const [isCliced, setisCliced] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setShowRePassword] = useState(false);
 
-  let user = {
-    name: "",
-    phone: "",
-    email: "",
-    password: "",
-    rePassword: "",
-  };
+  const validationSchema = yup.object().shape({
+    name: yup
+      .string()
+      .required("Name is required")
+      .min(3, "Minimum 3 characters")
+      .max(12, "Maximum 12 characters"),
+    phone: yup
+      .string()
+      .required("Phone is required")
+      .matches(/^01[0125][0-9]{8}$/, "Invalid Egyptian phone number"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(6, "Minimum 6 characters")
+      .max(12, "Maximum 12 characters"),
+    rePassword: yup
+      .string()
+      .required("Confirm password is required")
+      .oneOf([yup.ref("password")], "Passwords must match"),
+  });
 
-  async function submet(values) {
-    // console.log("call api", values);
-    setisCliced(true);
-    await axios
-      .post("https://ecommerce.routemisr.com/api/v1/auth/signup", values)
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+      rePassword: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setErrorMessage(null);
 
-      .then(function () {
-        // console.log('true', x);
-        setissuccess(true);
-        setisCliced(false);
-
-        setTimeout(() => {
-          navigate("/Login");
-        }, 2000);
-      })
-      .catch(function (x) {
-        // console.log('false', x);
-        setErrorMassegs(x.response.data.message);
-        setisCliced(false);
-
-        setTimeout(() => {
-          setErrorMassegs(null);
-        }, 2000);
-      });
-  }
-
-  //hook
-  const regesterformik = useFormik({
-    initialValues: user,
-    onSubmit: submet,
-
-    //   validate: function (alldata) {
-    //     const errors = {};
-    //     const nameRegex = /^[A-Z][a-z]{4,8}$/;
-    //     const phoneRegex = /^(20)?01[0125][0-9]{8}$/;
-    //     //.match(nameRegex)
-    //     //nameRegex.test("mohamed")
-
-    //     if (!nameRegex.test(alldata.name)) {
-    //       errors.name = 'name must start whit capital letter end letter 10';
-    //     }
-    //     if (!phoneRegex.test(alldata.phone)) {
-    //       errors.phone = 'phone must egyptain number';
-    //     }
-    //     if (!alldata.email.includes('@') || !alldata.email.includes('.') ) {
-    //       errors.email = 'invalid email';
-    //     }
-    //     if (alldata.password.length < 6 || alldata.password.length > 12 ) {
-    //       errors.password = 'password mast be 6 to 12 number';
-    //     }
-    //     if (alldata.password !== alldata.repassword) {
-    //       errors.repassword = 'repassword not match whit password';
-    //     }
-
-    // // console.log(errors);
-
-    // return errors;
-
-    //   },
-
-    validationSchema: yup.object().shape({
-      name: yup
-        .string()
-        .required("this is name")
-        .min(3, "minmum must 3 character")
-        .max(12, "maxmum must 3 character"),
-      phone: yup
-        .string()
-        .required("this is phone")
-        .matches(/^01[0125][0-9]{8}$/),
-      email: yup.string().required("this is email"),
-      password: yup.string().required().min(6).max(12),
-      rePassword: yup
-        .string()
-        .required()
-        .oneOf([yup.ref("password")], "repassword not match"),
-    }),
+      try {
+        await axios.post(
+          "https://ecommerce.routemisr.com/api/v1/auth/signup",
+          values,
+        );
+        setIsSuccess(true);
+        setTimeout(() => navigate("/login"), 2000);
+      } catch (err) {
+        setErrorMessage(err.response?.data?.message || "Something went wrong");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
   });
 
   return (
-    <>
-      <form
-        onSubmit={regesterformik.handleSubmit}
-        className="max-w-md mx-auto p-5 mt-16"
-      >
-        {issuccess ? (
-          <div
-            className="p-2 mb-4 text-sm text-green-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            success
-          </div>
-        ) : (
-          ""
-        )}
+    <div className="max-w-md mx-auto mt-16 p-6 bg-white shadow-md rounded-lg dark:bg-gray-800">
+      <h1 className="text-2xl font-bold text-center text-green-600 mb-6">
+        Register New Account
+      </h1>
 
-        {ErrorMassegs ? (
-          <div
-            className="p-2 mb-4 text-sm text-red-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            {ErrorMassegs}
-          </div>
-        ) : (
-          ""
-        )}
+      {isSuccess && (
+        <div className="p-2 mb-4 text-sm text-green-700 bg-green-100 rounded-lg text-center">
+          Registration successful! Redirecting...
+        </div>
+      )}
 
-        <h1 className=" text-center text-green-600">Register New:</h1>
+      {errorMessage && (
+        <div className="p-2 mb-4 text-sm text-red-700 bg-red-100 rounded-lg text-center">
+          {errorMessage}
+        </div>
+      )}
 
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            type="text"
-            value={regesterformik.values.name}
-            onBlur={regesterformik.handleBlur}
-            onChange={(events) => {
-              regesterformik.setFieldValue("name", events.target.value);
-              if (!regesterformik.touched.name) {
-                regesterformik.setFieldTouched("name", true);
-              }
-            }}
-            name="name"
-            id="name"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
-          <label
-            htmlFor="name"
-            className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
+        {/* Name */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
             Name
           </label>
-          {regesterformik.errors.name && regesterformik.touched.name ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.name}
+          <input
+            type="text"
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Mohamed"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
+          />
+          {formik.touched.name && formik.errors.name && (
+            <div className="text-red-600 mt-1 text-sm">
+              {formik.errors.name}
             </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
           )}
         </div>
 
-        <div className="relative z-0 w-full mb-10 group">
+        {/* Email */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
+            Email
+          </label>
           <input
-            autoComplete="username"
             type="email"
-            value={regesterformik.values.email}
-            onBlur={regesterformik.handleBlur}
-            onChange={(events) => {
-              regesterformik.setFieldValue("email", events.target.value);
-              if (!regesterformik.touched.email) {
-                regesterformik.setFieldTouched("email", true);
-              }
-            }}
             name="email"
-            id="email"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="example@email.com"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
           />
-          <label
-            htmlFor="email"
-            className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Email address
-          </label>
-          {regesterformik.errors.email && regesterformik.touched.email ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.email}
+          {formik.touched.email && formik.errors.email && (
+            <div className="text-red-600 mt-1 text-sm">
+              {formik.errors.email}
             </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
           )}
         </div>
 
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            autoComplete="new-password"
-            type="password"
-            value={regesterformik.values.password}
-            onBlur={regesterformik.handleBlur}
-            onChange={(events) => {
-              regesterformik.setFieldValue("password", events.target.value);
-              if (!regesterformik.touched.password) {
-                regesterformik.setFieldTouched("password", true);
-              }
-            }}
-            name="password"
-            id="password"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
-          <label
-            htmlFor="password"
-            className="peer-focus:font-medium absolute text-sm  dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Password
-          </label>
-          {regesterformik.errors.password && regesterformik.touched.password ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.password}
-            </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
-          )}
-        </div>
-
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            autoComplete="new-password"
-            type="password"
-            value={regesterformik.values.rePassword}
-            onBlur={regesterformik.handleBlur}
-            onChange={(events) => {
-              regesterformik.setFieldValue("rePassword", events.target.value);
-              if (!regesterformik.touched.rePassword) {
-                regesterformik.setFieldTouched("rePassword", true);
-              }
-            }}
-            name="rePassword"
-            id="rePassword"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
-          <label
-            htmlFor="rePassword"
-            className="peer-focus:font-medium absolute text-sm  dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Confirm password
-          </label>
-          {regesterformik.errors.rePassword &&
-          regesterformik.touched.rePassword ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.rePassword}
-            </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
-          )}
-        </div>
-
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            type="tel"
-            value={regesterformik.values.phone}
-            onBlur={regesterformik.handleBlur}
-            onChange={regesterformik.handleChange}
-            name="phone"
-            id="phone"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
-          <label
-            htmlFor="phone"
-            className="peer-focus:font-medium absolute text-sm  dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
+        {/* Phone */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
             Phone
           </label>
-          {regesterformik.errors.phone && regesterformik.touched.phone ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.phone}
+          <input
+            type="tel"
+            name="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="01012345678"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
+          />
+          {formik.touched.phone && formik.errors.phone && (
+            <div className="text-red-600 mt-1 text-sm">
+              {formik.errors.phone}
             </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
           )}
         </div>
 
+        {/* Password */}
+        <div className="relative">
+          <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
+            Password
+          </label>
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="********"
+            className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute mt-3 right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-300 select-none"
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </span>
+          {formik.touched.password && formik.errors.password && (
+            <div className="text-red-600 mt-1 text-sm">
+              {formik.errors.password}
+            </div>
+          )}
+        </div>
+
+        {/* Confirm Password */}
+        <div className="relative">
+          <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
+            Confirm Password
+          </label>
+          <input
+            type={showRePassword ? "text" : "password"}
+            name="rePassword"
+            value={formik.values.rePassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="********"
+            className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
+          />
+          <span
+            onClick={() => setShowRePassword(!showRePassword)}
+            className="absolute mt-3 right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-300 select-none"
+          >
+            {showRePassword ? "🙈" : "👁️"}
+          </span>
+          {formik.touched.rePassword && formik.errors.rePassword && (
+            <div className="text-red-600 mt-1 text-sm">
+              {formik.errors.rePassword}
+            </div>
+          )}
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
-          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          disabled={isSubmitting}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
         >
-          {!isCliced ? (
-            "Submit"
-          ) : (
-            <ColorRing
-              visible={true}
-              height="30"
-              width="30"
-              ariaLabel="color-ring-loading"
-              wrapperStyle={{}}
-              wrapperClass="color-ring-wrapper"
-              colors={[" #fff", "#fff", "#fff", "#fff", "#fff"]}
-            />
-          )}
+          {isSubmitting ? "Registering..." : "Register"}
         </button>
       </form>
-    </>
+    </div>
   );
 }

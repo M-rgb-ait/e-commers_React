@@ -1,167 +1,98 @@
-// import axios from "axios";
-// import {  useState } from "react";
-// import { Link } from "react-router-dom";
-
-// export default function Forgitpassword() {
-//   const [email, setEmail] = useState("");
-//   const [message, setMessage] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const response = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords", {
-//         email,
-//       });
-
-//       setMessage(response.data.message);
-//     } catch (error) {
-//       setMessage("error",error);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>enter an email</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="email"
-//           placeholder='enter an email'
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           required
-//         />
-//         <button type="submit">submit</button>
-//         <Link to='/CodeForgitpassword'>
-//         <button className="bg-red-50 ms-5 me-5" type="submit">code</button>
-//         </Link>
-//       </form>
-//       <p>{message}</p>
-//     </div>
-//   );
-// };
-
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
-// import { ColorRing } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-// import { authcontext } from "../../Context/AuthContext";
 
-export default function Forgitpassword() {
+export default function ForgotPassword() {
   const navigate = useNavigate();
-  // const {setUseToken} = useContext(authcontext);
-  const [ErrorMassegs, setErrorMassegs] = useState(null);
-  const [issuccess, setissuccess] = useState(false);
-  const [isCliced, setisCliced] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  let user = {
-    email: "",
-  };
-
-  function forgetuser(values) {
-    setisCliced(true);
-    axios
-      .post(
-        "https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords",
-        values
-      )
-      .then(function (res) {
-        setissuccess(true);
-        setisCliced(false);
-        // setUseToken(response.data.token);
-        console.log(res);
-        setTimeout(() => {
-          navigate("/CodeForgitpassword");
-        }, 1000);
-      })
-      .catch(function (x) {
-        setErrorMassegs(x.response.data.message);
-        setisCliced(false);
-        console.log(x);
-        setTimeout(() => {
-          setErrorMassegs(null);
-        }, 2000);
-      });
-  }
-
-  //hook
-  const regesterformik = useFormik({
-    initialValues: user,
-    onSubmit: forgetuser,
-
-    validationSchema: yup.object().shape({
-      email: yup.string().required("this is email"),
+  const formik = useFormik({
+    initialValues: { email: "" },
+    validationSchema: yup.object({
+      email: yup.string().email("Invalid email").required("Email is required"),
     }),
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setErrorMsg("");
+      setSuccess(false);
+
+      try {
+        await axios.post(
+          "https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords",
+          values,
+        );
+        setSuccess(true);
+        setTimeout(() => navigate("/CodeForgitpassword"), 1000);
+      } catch (error) {
+        setErrorMsg(error.response?.data?.message || "Something went wrong");
+        setTimeout(() => setErrorMsg(""), 3000);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
   });
 
   return (
-    <>
-      <form
-        onSubmit={regesterformik.handleSubmit}
-        className="max-w-md mx-auto p-5 mt-14"
-      >
-        {issuccess ? (
-          <div
-            className="p-2 mb-4 text-sm text-green-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            success
-          </div>
-        ) : (
-          ""
-        )}
+    <div className="max-w-md mx-auto p-6 mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h1 className="text-center text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+        Forgot Password
+      </h1>
 
-        {ErrorMassegs ? (
-          <div
-            className="p-2 mb-4 text-sm text-red-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            {ErrorMassegs}
-          </div>
-        ) : (
-          ""
-        )}
+      {success && (
+        <div className="p-2 mb-4 text-sm text-green-700 rounded-lg bg-green-50 dark:bg-gray-700 dark:text-green-400">
+          Code sent successfully!
+        </div>
+      )}
 
-        <h1 className=" text-center text-green-600">forget New:</h1>
+      {errorMsg && (
+        <div className="p-2 mb-4 text-sm text-red-700 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400">
+          {errorMsg}
+        </div>
+      )}
 
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            autoComplete="username"
-            type="email"
-            value={regesterformik.values.email}
-            onBlur={regesterformik.handleBlur}
-            onChange={regesterformik.handleChange}
-            name="email"
-            id="email"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
+      <form onSubmit={formik.handleSubmit} noValidate>
+        {/* Email Field */}
+        <div className="mb-5">
           <label
             htmlFor="email"
-            className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
           >
-            Email address
+            Email
           </label>
-          {regesterformik.errors.email && regesterformik.touched.email ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.email}
-            </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
-          )}
+          <div className="relative">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="user@example.com"
+              className={`w-full px-4 py-2 border rounded-lg text-sm text-gray-900 dark:text-gray-100 dark:bg-gray-700 
+        focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 
+        ${formik.touched.email && formik.errors.email ? "border-red-600" : "border-gray-300 dark:border-gray-600"}`}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                {formik.errors.email}
+              </p>
+            )}
+          </div>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          disabled={isSubmitting}
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Send Code
+          {isSubmitting ? "Sending..." : "Send Code"}
         </button>
       </form>
-    </>
+    </div>
   );
 }

@@ -1,244 +1,143 @@
-// import axios from "axios";
-// import { useFormik } from "formik"
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import * as yup from 'yup';
-
-// export default function ReasetPassword() {
-// const navigate = useNavigate();
-// const [ErrorMassegs,setErrorMassegs] =useState(null);
-// const [issuccess,setissuccess] =useState(false);
-// const [isCliced,setisCliced] =useState(false);
-
-// let user = {
-//   email:'',
-//   newPassword:'',
-// }
-
-//  function reasetuser(values) {
-//   setisCliced(true);
-// axios.put('https://ecommerce.routemisr.com/api/v1/auth/resetPassword', values).then(function (res) {
-//     setissuccess(true);
-//     setisCliced(false);
-//          console.log(res)
-//     setTimeout(() => {
-//       navigate('/Login');
-//     }, 1000);
-
-//   })
-//   .catch(function (x) {
-//     setErrorMassegs(x.response.data.message);
-//     setisCliced(false);
-//          console.log(x)
-//     setTimeout(() => {
-//       setErrorMassegs(null);
-//     }, 2000);
-
-//   });
-
-// }
-
-// //hook
-//  const regesterformik= useFormik({
-//     initialValues: user,
-//     onSubmit: reasetuser,
-
-//   validationSchema: yup.object().shape({
-//     email:yup.string().required('this is email'),
-//     password:yup.string().required('this is newpassword').min(6).max(12),
-//   }),
-
-//   });
-
-//   return (
-// <>
-
-// <form onSubmit={regesterformik.handleSubmit} className="max-w-md mx-auto p-5 mt-14">
-
-//     {issuccess?  <div className="p-2 mb-4 text-sm text-green-700 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
-//       success
-//     </div> : ''}
-
-//     {ErrorMassegs? <div className="p-2 mb-4 text-sm text-red-700 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert">
-//       {ErrorMassegs}
-//     </div>: ''}
-
-//   <h1 className=" text-center text-green-600">reaset New:</h1>
-
-//   <div className="relative z-0 w-full mb-10 group">
-//     <input autoComplete="username" type="email" value={regesterformik.values.email} onBlur={regesterformik.handleBlur} onChange={regesterformik.handleChange} name="email" id="email" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-//     <label htmlFor="email" className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
-//     {regesterformik.errors.email && regesterformik.touched.email ?
-//     <div className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-//       {regesterformik.errors.email}
-//     </div> : <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div> }
-//   </div>
-
-//   <div className="relative z-0 w-full mb-10 group">
-//     <input autoComplete="username" type="password" value={regesterformik.values.password} onBlur={regesterformik.handleBlur} onChange={regesterformik.handleChange} name="newPassword" id="password" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-//     <label htmlFor="password" className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">newpassword</label>
-//     {regesterformik.errors.password && regesterformik.touched.password ?
-//     <div className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-//       {regesterformik.errors.password}
-//     </div> : <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div> }
-//   </div>
-
-//   <button type="submit" className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-//       Reaset password
-//     </button>
-
-// </form>
-// </>
-//   )
-// }
-
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-export default function ReasetPassword() {
+export default function ResetPassword() {
   const navigate = useNavigate();
-  const [ErrorMassegs, setErrorMassegs] = useState(null);
-  const [issuccess, setissuccess] = useState(false);
-  const [isCliced, setisCliced] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  let user = {
-    email: "",
-    newPassword: "",
-  };
-
-  async function reasetuser(values) {
-    setisCliced(true);
-    await axios
-      .put("https://ecommerce.routemisr.com/api/v1/auth/resetPassword", values)
-      .then(function (response) {
-        setissuccess(true);
-        setisCliced(false);
-        localStorage.setItem("token", response.data.token);
-        console.log("response", response);
-
-        setTimeout(() => {
-          navigate("/Login");
-        }, 1000);
-      })
-      .catch(function (x) {
-        setErrorMassegs(x.response.data.message);
-        setisCliced(false);
-
-        setTimeout(() => {
-          setErrorMassegs(null);
-        }, 2000);
-      });
-  }
-
-  //hook
-  const regesterformik = useFormik({
-    initialValues: user,
-    onSubmit: reasetuser,
-
-    validationSchema: yup.object().shape({
-      email: yup.string().required("this is email"),
-      newPassword: yup.string().required("this is password").min(6).max(12),
+  const formik = useFormik({
+    initialValues: { email: "", newPassword: "" }, // لازم يكون newPassword
+    validationSchema: yup.object({
+      email: yup.string().email("Invalid email").required("Email is required"),
+      newPassword: yup
+        .string()
+        .required("Password is required")
+        .min(6, "Minimum 6 characters")
+        .max(12, "Maximum 12 characters"),
     }),
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setErrorMsg("");
+      setSuccess(false);
+
+      try {
+        const res = await axios.put(
+          "https://ecommerce.routemisr.com/api/v1/auth/resetPassword",
+          values,
+        );
+        setSuccess(true);
+        localStorage.setItem("token", res.data.token);
+        setTimeout(() => navigate("/Login"), 1000);
+      } catch (error) {
+        setErrorMsg(error.response?.data?.message || "Something went wrong");
+        setTimeout(() => setErrorMsg(""), 3000);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
   });
 
   return (
-    <>
-      <form
-        onSubmit={regesterformik.handleSubmit}
-        className="max-w-md mx-auto p-5 mt-14"
-      >
-        {issuccess ? (
-          <div
-            className="p-2 mb-4 text-sm text-green-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            success
-          </div>
-        ) : (
-          ""
-        )}
+    <div className="max-w-md mx-auto p-6 mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h1 className="text-center text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+        Reset Password
+      </h1>
 
-        {ErrorMassegs ? (
-          <div
-            className="p-2 mb-4 text-sm text-red-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            {ErrorMassegs}
-          </div>
-        ) : (
-          ""
-        )}
+      {success && (
+        <div className="p-2 mb-4 text-sm text-green-700 rounded-lg bg-green-50 dark:bg-gray-700 dark:text-green-400">
+          Password reset successfully!
+        </div>
+      )}
 
-        <h1 className=" text-center text-green-600">reaset New:</h1>
+      {errorMsg && (
+        <div className="p-2 mb-4 text-sm text-red-700 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400">
+          {errorMsg}
+        </div>
+      )}
 
-        <div className="relative z-0 w-full mb-10 mt-10 group">
-          <input
-            autoComplete="username"
-            type="email"
-            value={regesterformik.values.email}
-            onBlur={regesterformik.handleBlur}
-            onChange={regesterformik.handleChange}
-            name="email"
-            id="email"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          />
+      <form onSubmit={formik.handleSubmit} noValidate>
+        {/* Email Input */}
+        <div className="mb-5">
           <label
             htmlFor="email"
-            className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Email address
           </label>
-          {regesterformik.errors.email && regesterformik.touched.email ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.email}
-            </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="user@example.com"
+            className={`w-full px-4 py-2 border rounded-lg text-sm text-gray-900 dark:text-gray-100 dark:bg-gray-700 
+              focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+              ${formik.touched.email && formik.errors.email ? "border-red-600" : "border-gray-300 dark:border-gray-600"}`}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {formik.errors.email}
+            </p>
           )}
         </div>
 
-        <div className="relative z-0 w-full mb-10 mt-10 group">
-          <input
-            autoComplete="username"
-            type="password"
-            value={regesterformik.values.newPassword}
-            onBlur={regesterformik.handleBlur}
-            onChange={regesterformik.handleChange}
-            name="newPassword"
-            id="password"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          />
+        {/* New Password Input */}
+        <div className="mb-5 relative">
           <label
             htmlFor="newPassword"
-            className="peer-focus:font-medium absolute text-sm  dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
           >
-            newPassword
+            New Password
           </label>
-          {regesterformik.errors.newPassword &&
-          regesterformik.touched.newPassword ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
+
+          <div className="relative">
+            <input
+              id="newPassword"
+              type={showPassword ? "text" : "password"}
+              name="newPassword"
+              value={formik.values.newPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="Enter your new password"
+              className={`w-full px-4 py-2 pr-10 border rounded-lg text-sm text-gray-900 dark:text-gray-100 dark:bg-gray-700
+              focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
+              ${formik.touched.newPassword && formik.errors.newPassword ? "border-red-600" : "border-gray-300 dark:border-gray-600"}`}
+            />
+
+            {/* Show/Hide Password Icon */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300 focus:outline-none"
             >
-              {regesterformik.errors.newPassword}
-            </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
+
+          {formik.touched.newPassword && formik.errors.newPassword && (
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              {formik.errors.newPassword}
+            </p>
           )}
         </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
-          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          disabled={isSubmitting}
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Reaset password
+          {isSubmitting ? "Resetting..." : "Reset Password"}
         </button>
       </form>
-    </>
+    </div>
   );
 }

@@ -2,117 +2,93 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import * as yup from 'yup';
 
 export default function CodeForgitpassword() {
   const navigate = useNavigate();
-  const [ErrorMassegs, setErrorMassegs] = useState(null);
-  const [issuccess, setissuccess] = useState(false);
-  const [isCliced, setisCliced] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  let user = {
-    resetCode: "",
-  };
+  const formik = useFormik({
+    initialValues: { resetCode: "" },
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setErrorMsg("");
+      setSuccess(false);
 
-  function codeuser(values) {
-    setisCliced(true);
-    axios
-      .post(
-        "https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode",
-        values
-      )
-      .then(function (res) {
-        setissuccess(true);
-        setisCliced(false);
-        console.log(res);
-
-        setTimeout(() => {
-          navigate("/ReasetPassword");
-        }, 1000);
-      })
-      .catch(function (x) {
-        setErrorMassegs(x.response.data.message);
-        setisCliced(false);
-        console.log(x);
-        setTimeout(() => {
-          setErrorMassegs(null);
-        }, 2000);
-      });
-  }
-
-  //hook
-  const regesterformik = useFormik({
-    initialValues: user,
-    onSubmit: codeuser,
+      try {
+        await axios.post(
+          "https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode",
+          values,
+        );
+        setSuccess(true);
+        setTimeout(() => navigate("/ReasetPassword"), 1000);
+      } catch (error) {
+        setErrorMsg(error.response?.data?.message || "Something went wrong");
+        setTimeout(() => setErrorMsg(""), 3000);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
   });
 
   return (
-    <>
-      <form
-        onSubmit={regesterformik.handleSubmit}
-        className="max-w-md mx-auto p-5 mt-14"
-      >
-        {issuccess ? (
-          <div
-            className="p-2 mb-4 text-sm text-green-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            success
-          </div>
-        ) : (
-          ""
-        )}
+    <div className="max-w-md mx-auto p-6 mt-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h1 className="text-center text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+        Enter Code
+      </h1>
 
-        {ErrorMassegs ? (
-          <div
-            className="p-2 mb-4 text-sm text-red-700 rounded-lg dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            {ErrorMassegs}
-          </div>
-        ) : (
-          ""
-        )}
+      {success && (
+        <div className="p-2 mb-4 text-sm text-green-700 rounded-lg bg-green-50 dark:bg-gray-700 dark:text-green-400">
+          Code verified successfully!
+        </div>
+      )}
 
-        <h1 className=" text-center text-green-600">Code New:</h1>
+      {errorMsg && (
+        <div className="p-2 mb-4 text-sm text-red-700 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400">
+          {errorMsg}
+        </div>
+      )}
 
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            autoComplete="username"
-            type="text"
-            value={regesterformik.values.text}
-            onBlur={regesterformik.handleBlur}
-            onChange={regesterformik.handleChange}
-            name="resetCode"
-            id="text"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
+      <form onSubmit={formik.handleSubmit} noValidate>
+        {/* Reset Code Input */}
+        <div className="mb-5">
           <label
-            htmlFor="text"
-            className="peer-focus:font-medium absolute text-sm dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            htmlFor="resetCode"
+            className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
           >
-            text address
+            Reset Code
           </label>
-          {regesterformik.errors.text && regesterformik.touched.text ? (
-            <div
-              className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {regesterformik.errors.text}
-            </div>
-          ) : (
-            <div className="p-2 mb-4 text-sm text-red-800 rounded-lg">yes</div>
-          )}
+          <div className="relative">
+            <input
+              type="text"
+              id="resetCode"
+              name="resetCode"
+              value={formik.values.resetCode}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="Enter the code"
+              className={`w-full px-4 py-2 border rounded-lg text-sm text-gray-900 dark:text-gray-100 dark:bg-gray-700 
+                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 
+                ${formik.touched.resetCode && formik.errors.resetCode ? "border-red-600" : "border-gray-300 dark:border-gray-600"}`}
+            />
+            {formik.touched.resetCode && formik.errors.resetCode && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                {formik.errors.resetCode}
+              </p>
+            )}
+          </div>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          disabled={isSubmitting}
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Code email
+          {isSubmitting ? "Verifying..." : "Verify Code"}
         </button>
       </form>
-    </>
+    </div>
   );
 }
