@@ -13,6 +13,7 @@ export default function Navbar() {
   function handleLogout() {
     localStorage.removeItem("token");
     setUseToken(null);
+    setMenuOpen(false); // تغلق القائمة عند تسجيل الخروج
     navigate("/Login");
   }
 
@@ -33,15 +34,17 @@ export default function Navbar() {
 
         {/* أيقونة السلة وزر الهامبرغر */}
         <div className="flex items-center md:order-2 space-x-3 rtl:space-x-reverse">
-          {/* أيقونة السلة تظهر دائمًا */}
-          <Link to="/Cart" className="relative">
-            <i className="fa-solid fa-cart-shopping mr-2 md:mr-4"></i>
-            {numOfCartItems > 0 && (
-              <span className="absolute top-0 right-0 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                {numOfCartItems}
-              </span>
-            )}
-          </Link>
+          {/* أيقونة السلة تظهر فقط إذا المستخدم مسجّل دخول */}
+          {useToken && (
+            <Link to="/Cart" className="relative">
+              <i className="fa-solid fa-cart-shopping mr-2 md:mr-4"></i>
+              {numOfCartItems > 0 && (
+                <span className="absolute top-0 right-0 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {numOfCartItems}
+                </span>
+              )}
+            </Link>
+          )}
 
           {/* Logout يظهر على الديسكتوب فقط */}
           {useToken && (
