@@ -58,7 +58,7 @@ export default function Home() {
           page: currpage,
           sort,
         },
-      }
+      },
     );
     setallprodect(data);
     setLodersceen(false);
@@ -111,89 +111,113 @@ export default function Home() {
 
   return (
     <>
-      <div className=" container mx-auto mt-24">
-        <div className="flex items-center justify-center gap-5 mb-5">
+      <div className="container mx-auto mt-24 px-4">
+        {/* Filter */}
+        <div className="flex items-center justify-center gap-4 mb-8">
           <label htmlFor="productSelect">
             <i className="fa-solid fa-filter text-green-600 text-2xl"></i>
           </label>
+
           <select
             id="productSelect"
             onChange={handelSort}
             defaultValue={sort}
-            className="w-1/5 py-3 border border-green-500 rounded-md text-center"
+            className="w-52 py-3 border border-green-500 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-green-400"
           >
-            <option value="-price">price High to Low</option>
-            <option value="price">price Low to High</option>
-            <option value="ratingsAverage">Top Reted</option>
+            <option value="-price">Price High to Low</option>
+            <option value="price">Price Low to High</option>
+            <option value="ratingsAverage">Top Rated</option>
             <option value="title">A to Z</option>
             <option value="-title">Z to A</option>
           </select>
         </div>
 
-        <div className=" grid md:grid-cols-3 lg:md:grid-cols-6 gap-2 md:gap-5">
-          {/* {allodersceen && <LoderScreen/>} */}
+        {/* Products Grid */}
+        <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-5">
           {allprodect.data?.map((prodect) => {
             const isfavouret = isinwhishlist(prodect.id);
 
             return (
-              <div key={prodect._id} className="relative">
+              <div
+                key={prodect._id}
+                className="group relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+              >
                 <Link
                   to={`/ProdectDetails/${prodect._id}`}
-                  className="rounded-lg p-1 relative overflow-hidden group"
+                  className="block p-3"
                 >
-                  <img
-                    src={prodect.imageCover}
-                    alt={prodect.title}
-                    className="w-full"
-                  />
-                  <h3>{prodect.title.split("").slice(0, 11).join("")}</h3>
-                  <h2 className="mt-5">{prodect.category.name}</h2>
-                  <div className=" flex justify-between items-center mt-5 mb-5">
-                    <p>
-                      <i className="fa-solid fa-star text-yellow-400"></i>{" "}
+                  {/* Image */}
+                  <div className="overflow-hidden rounded-xl">
+                    <img
+                      src={prodect.imageCover}
+                      alt={prodect.title}
+                      className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="mt-3 font-semibold text-gray-800">
+                    {prodect.title.split("").slice(0, 11).join("")}
+                  </h3>
+
+                  {/* Category */}
+                  <h2 className="text-sm text-gray-500">
+                    {prodect.category.name}
+                  </h2>
+
+                  {/* Rating + Price */}
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="flex items-center gap-1 text-yellow-500 text-sm">
+                      <i className="fa-solid fa-star"></i>
                       {prodect.ratingsAverage}
                     </p>
-                    <div className=" flex gap-2 ">
+
+                    <div className="flex gap-2 text-sm">
                       {prodect.priceAfterDiscount ? (
                         <>
-                          <p>{prodect.price}</p>
+                          <p className="font-semibold">{prodect.price}</p>
                           <p className="text-red-500 line-through">
                             {prodect.priceAfterDiscount}
                           </p>
                         </>
                       ) : (
-                        <p>{prodect.price}</p>
+                        <p className="font-semibold">{prodect.price}</p>
                       )}
                     </div>
                   </div>
-                  {/* gap-6 translate-x-[100%] group-hover:translate-x-0  */}
-
-                  <div className=" absolute left-[90px] transition">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        HandelAppProdect(prodect._id);
-                      }}
-                      className=" bg-green-400 rounded-lg p-2"
-                    >
-                      Addproduct
-                    </button>
-                  </div>
                 </Link>
-                <button
-                  className=" text-xl"
-                  onClick={() => {
-                    isfavouret
-                      ? removeFromewhishlist(prodect._id)
-                      : addwhishlist(prodect);
-                  }}
-                >
-                  <i
-                    className={`fas fa-heart ${
-                      isfavouret ? "text-red-500" : "text-gray-950"
-                    }`}
-                  ></i>
-                </button>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between px-3 pb-3 mt-2">
+                  {/* Add Button */}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      HandelAppProdect(prodect._id);
+                    }}
+                    className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-lg transition"
+                  >
+                    Add to Cart
+                  </button>
+
+                  {/* Wishlist */}
+                  <button
+                    className="text-xl transition"
+                    onClick={() => {
+                      isfavouret
+                        ? removeFromewhishlist(prodect._id)
+                        : addwhishlist(prodect);
+                    }}
+                  >
+                    <i
+                      className={`fas fa-heart transition ${
+                        isfavouret
+                          ? "text-red-500"
+                          : "text-gray-400 hover:text-red-400"
+                      }`}
+                    ></i>
+                  </button>
+                </div>
               </div>
             );
           })}

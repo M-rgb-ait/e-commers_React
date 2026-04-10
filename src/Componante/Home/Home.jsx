@@ -1,6 +1,11 @@
 import HomeSelider from "../HomeSelider/HomeSelider";
-import Prodect from "../Prodect/Prodect";
+// import Prodect from "../Prodect/Prodect";
 import Categoreslider from "../Categores/Categoreslider";
+import AboutSection from "./about";
+import GallerySection from "./gallery";
+import ImagesSection from "./images";
+import FeaturesSection from "./feauter";
+import TestimonialsPage from "./testimonial";
 
 export default function Home() {
   return (
@@ -10,8 +15,13 @@ export default function Home() {
           <HomeSelider />
           <Categoreslider />
         </div>
+        <FeaturesSection />
+        <AboutSection />
+        <GallerySection />
+        <ImagesSection />
+        <TestimonialsPage />
 
-        <Prodect />
+        {/* <Prodect /> */}
       </div>
     </>
   );

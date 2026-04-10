@@ -1,68 +1,66 @@
-import { createContext, useEffect } from "react";
-// import { authcontext } from "./AuthContext";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useState } from "react";
+import toast from "react-hot-toast";
 
 export const WishlistContext = createContext();
 
 export default function WishlistContextProvider({ children }) {
   const [whishlist, setWhishlist] = useState([]);
-  // const {useToken} = useContext(authcontext);
-  let headers = {
+
+  const headers = {
     token: localStorage.getItem("token"),
   };
 
+  // GET wishlist
   const getwhishlist = async () => {
     try {
-      const { data } = axios.get(
-        `https://ecommerce.routemisr.com/api/v1/wishlist`,
-        { headers: headers }
+      const { data } = await axios.get(
+        "https://ecommerce.routemisr.com/api/v1/wishlist",
+        { headers },
       );
+
       setWhishlist(data?.data || []);
-      localStorage.setItem("whishlist", JSON.stringify(data?.data || []));
+      toast.success("Added to wishlist ❤️");
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addwhishlist = async (prodect) => {
+  // ADD
+  const addwhishlist = async (product) => {
     try {
       await axios.post(
-        `https://ecommerce.routemisr.com/api/v1/wishlist`,
-        { productId: prodect._id },
-        { headers: headers }
+        "https://ecommerce.routemisr.com/api/v1/wishlist",
+        { productId: product._id },
+        { headers },
       );
-      let updataedlist = [...whishlist, prodect];
-      setWhishlist(updataedlist);
-      localStorage.setItem("whishlist", JSON.stringify(updataedlist));
-    } catch (erro) {
-      console.log(erro);
+
+      setWhishlist((prev) => [...prev, product]);
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  // REMOVE
   const removeFromewhishlist = async (productId) => {
     try {
       await axios.delete(
         `https://ecommerce.routemisr.com/api/v1/wishlist/${productId}`,
-        { headers: headers }
+        { headers },
       );
-      let filterprodect = whishlist.filter((item) => item.id !== productId);
-      setWhishlist(filterprodect);
-      localStorage.setItem("whishlist", JSON.stringify(filterprodect));
-    } catch (err) {
-      console.log(err);
+
+      setWhishlist((prev) => prev.filter((item) => item._id !== productId));
+    } catch (error) {
+      console.log(error);
     }
   };
+
   const isinwhishlist = (productId) => {
-    return whishlist.some((item) => item.id == productId);
+    return whishlist.some((item) => item._id === productId);
   };
 
   useEffect(() => {
-    const storedfav = localStorage.getItem("whishlist");
-    if (storedfav) {
-      setWhishlist(JSON.parse(storedfav));
-    } else {
-      getwhishlist();
-    }
+    getwhishlist();
   }, []);
 
   return (

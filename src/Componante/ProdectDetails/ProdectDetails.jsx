@@ -43,7 +43,7 @@ export default function ProdectDetails() {
     function () {
       setcurentimg(ProdectDetailsobj?.imageCover);
     },
-    [ProdectDetailsobj]
+    [ProdectDetailsobj],
   );
 
   if (isLoading) {
@@ -54,38 +54,54 @@ export default function ProdectDetails() {
   }
   return (
     <>
-      <div className=" container mx-auto mt-24">
-        <div className=" grid sm:grid-cols-4">
-          <div className="col-span-1">
-            <img
-              src={curentimg}
-              className="w-full mb-6"
-              alt={ProdectDetailsobj.title}
-            />
-          </div>
-          <div className="col-span-3">
-            <h1> {ProdectDetailsobj.title} </h1>
-            <p> {ProdectDetailsobj.description} </p>
-            <h5>price: {ProdectDetailsobj.price} </h5>
-            <button
-              onClick={handelAddtocart}
-              className=" bg-green-700 py-2 rounded-lg w-full cursor-pointer"
-            >
-              +add cart
-            </button>
+      <div className="container mx-auto mt-24 px-4">
+        {/* Main Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Image Section */}
+          <div className="md:col-span-1">
+            <div className="bg-white rounded-2xl shadow-md p-3">
+              <img
+                src={curentimg}
+                className="w-full h-[350px] object-cover rounded-xl"
+                alt={ProdectDetailsobj.title}
+              />
+            </div>
           </div>
 
-          {/* <button className=" text-xl" onClick={() => {isfavouret?removeFromewhishlist(ProdectDetailsobj._id) : addwhishlist(ProdectDetailsobj)}}>
-      <i className={`fas fa-heart ${isfavouret? 'text-red-500' : 'text-gray-950'}`}></i>
-    </button> */}
+          {/* Details */}
+          <div className="md:col-span-3 space-y-4">
+            <h1 className="text-2xl font-bold text-gray-800">
+              {ProdectDetailsobj.title}
+            </h1>
+
+            <p className="text-gray-600 leading-relaxed">
+              {ProdectDetailsobj.description}
+            </p>
+
+            <h5 className="text-xl font-semibold text-green-600">
+              Price: {ProdectDetailsobj.price} EGP
+            </h5>
+
+            <button
+              onClick={handelAddtocart}
+              className="bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl w-full transition"
+            >
+              + Add to Cart
+            </button>
+          </div>
         </div>
-        <div className="flex  flex-wrap  gap-4">
-          {ProdectDetailsobj?.images.map((item) => (
+
+        {/* Thumbnails */}
+        <div className="flex flex-wrap gap-4 mt-10 justify-center">
+          {ProdectDetailsobj?.images.map((item, index) => (
             <img
-              className="w-56"
-              onClick={() => setcurentimg(item)}
-              key={item}
+              key={index}
               src={item}
+              onClick={() => setcurentimg(item)}
+              className={`w-24 h-24 object-cover rounded-lg cursor-pointer border-2 transition hover:scale-105 ${
+                curentimg === item ? "border-green-500" : "border-transparent"
+              }`}
+              alt="product"
             />
           ))}
         </div>

@@ -35,7 +35,7 @@ export default function Order() {
           headers: {
             token: localStorage.getItem("token"),
           },
-        }
+        },
       )
       .then((res) => {
         if (res.data.status === "success") {
@@ -62,7 +62,7 @@ export default function Order() {
           params: {
             url: "http://localhost:5173",
           },
-        }
+        },
       )
       .then((res) => {
         window.open(res.data.session.url, "_self");
