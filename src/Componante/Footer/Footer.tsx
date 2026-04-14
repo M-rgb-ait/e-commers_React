@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
         {/* Store Info */}
         <div>
-          <h2 className="text-xl font-bold mb-4"> FreshCart</h2>
+          <h2 className="text-xl font-bold mb-4">Tafaoil</h2>
           <p className="text-sm text-gray-300">
             Your trusted online store for quality products and fast delivery
             across the globe.
@@ -30,7 +30,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} FreshCart All rights reserved .
+        © {new Date().getFullYear()} Tafaoil All rights reserved . M.Atta
       </div>
     </footer>
   );

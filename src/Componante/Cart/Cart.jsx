@@ -17,41 +17,36 @@ export default function Cart() {
   return (
     <>
       <div className="container mx-auto p-4 mt-10">
-        <h2 className="text-4xl text-gray-900 bg-green-500 text-center p-2">
-          cart
+        {/* Header */}
+        <h2 className="text-3xl font-bold text-white bg-gradient-to-r from-green-600 to-emerald-500 text-center p-3 rounded-lg shadow">
+          Shopping Cart
         </h2>
-        <div className="flex justify-between items-center mt-7 mb-7">
-          <h2 className="text-2xl p-3 bg-green-500 border border-green-500 rounded-md">
-            totalCart: {totalCartPrice}
+
+        {/* Top bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-8 mb-6">
+          <h2 className="text-xl font-semibold px-5 py-3 bg-emerald-100 text-emerald-700 rounded-lg shadow-sm border border-emerald-200">
+            Total: <span className="font-bold">{totalCartPrice} EGP</span>
           </h2>
+
           <button
             onClick={HandelDeleteAll}
-            className="flex items-center justify-center p-1 ms-3 text-sm text-red-600 bg-red-300 border border-red-500 rounded-md dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            className="px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition rounded-lg shadow"
             type="button"
           >
-            Remove All product
+            Remove All Items
           </button>
         </div>
 
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        {/* Table */}
+        <div className="relative overflow-x-auto shadow-lg rounded-xl border border-gray-200 bg-white">
+          <table className="w-full text-sm text-left text-gray-600">
+            <thead className="text-xs uppercase bg-gray-100 text-gray-700">
               <tr>
-                <th scope="col" className="px-16 py-3">
-                  <span className="sr-only">Image</span>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Product
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Qty
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Price
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Action
-                </th>
+                <th className="px-6 py-4">Image</th>
+                <th className="px-6 py-4">Product</th>
+                <th className="px-6 py-4">Quantity</th>
+                <th className="px-6 py-4">Price</th>
+                <th className="px-6 py-4">Action</th>
               </tr>
             </thead>
 
@@ -59,78 +54,85 @@ export default function Cart() {
               {products.map((prodect) => (
                 <tr
                   key={prodect._id}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="border-b hover:bg-gray-50 transition"
                 >
+                  {/* Image */}
                   <td className="p-4">
                     <img
                       src={prodect.product.imageCover}
-                      className="w-16 md:w-32 max-w-full max-h-full"
+                      className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border"
                       alt={prodect.product.title}
                     />
                   </td>
 
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  {/* Title */}
+                  <td className="px-6 py-4 font-medium text-gray-800">
                     {prodect.product.title}
                   </td>
 
+                  {/* Quantity */}
                   <td className="px-6 py-4">
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() =>
                           HandelChangeCount(
                             prodect.product._id,
-                            prodect.count - 1
+                            prodect.count - 1,
                           )
                         }
-                        className="inline-flex items-center justify-center p-1 me-3 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        type="button"
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300"
                       >
                         -
                       </button>
 
-                      <div>
-                        <input
-                          type="number"
-                          value={prodect.count}
-                          id="first_product"
-                          className="bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          required
-                        />
-                      </div>
+                      <input
+                        type="number"
+                        value={prodect.count}
+                        className="w-14 text-center border rounded-md py-1"
+                        readOnly
+                      />
 
                       <button
                         onClick={() =>
                           HandelChangeCount(
                             prodect.product._id,
-                            prodect.count + 1
+                            prodect.count + 1,
                           )
                         }
-                        className="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        type="button"
+                        className="w-7 h-7 flex items-center justify-center rounded-full bg-emerald-500 text-white hover:bg-emerald-600"
                       >
                         +
                       </button>
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                    {prodect.price}EGP
+                  {/* Price */}
+                  <td className="px-6 py-4 font-semibold text-emerald-600">
+                    {prodect.price} EGP
                   </td>
+
+                  {/* Action */}
                   <td className="px-6 py-4">
-                    <a
+                    <button
                       onClick={() => HandelDelete(prodect.product._id)}
-                      className="font-medium cursor-pointer text-red-600 dark:text-red-500 hover:underline"
+                      className="text-red-500 hover:text-red-700 font-medium transition"
                     >
                       Remove
-                    </a>
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <Link to="/Order">
-            <button className="bg-green-500 p-5 w-full">pay prodect</button>
-          </Link>
+
+          {/* Checkout */}
+          <div className="p-4">
+            <Link to="/Order">
+              <button className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">
+                Proceed to Checkout
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </>

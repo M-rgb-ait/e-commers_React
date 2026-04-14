@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import frestlogo from "../../assets/imgs/freshcart-logo.svg";
+import frestlogo from "../../assets/imgs/logo.png";
 import { useContext, useState } from "react";
 import { authcontext } from "../../Context/AuthContext";
 import { cartContext } from "../../Context/CartContext";
