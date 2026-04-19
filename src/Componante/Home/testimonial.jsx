@@ -44,7 +44,7 @@ export default function TestimonialsPage() {
   };
 
   return (
-    <section className="py-10 bg-gray-50">
+    <section className="py-10 bg-gray-50 my-11">
       {/* Title */}
       <div className="text-center mb-10">
         <h2 className="text-2xl font-bold text-pink-500">Testimonials</h2>

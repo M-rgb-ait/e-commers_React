@@ -1,53 +1,57 @@
-import axios from "axios";
-import background from "../../../public/assets/background_1.jpg";
+import background from "../../public/assets/background_1.jpg";
 import { useFormik } from "formik";
-import { useContext, useState } from "react";
-import { ColorRing } from "react-loader-spinner";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { authcontext } from "../../Context/AuthContext";
+import admins from "./admins";
 
-export default function Login() {
+export default function AdminLogin() {
   const navigate = useNavigate();
-  const { setUseToken } = useContext(authcontext); // استخدام context
+
   const [errorMsg, setErrorMsg] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const loginSchema = yup.object().shape({
-    email: yup.string().email("Invalid email").required("Email is required"),
+  const adminSchema = yup.object().shape({
+    username: yup.string().required("Username is required"),
     password: yup
       .string()
       .required("Password is required")
-      .min(6, "Password must be at least 6 characters")
-      .max(12, "Password must be at most 12 characters"),
+      .min(4, "Password must be at least 4 characters"),
   });
 
   const formik = useFormik({
-    initialValues: { email: "", password: "" },
-    validationSchema: loginSchema,
+    initialValues: { username: "", password: "" },
+    validationSchema: adminSchema,
     onSubmit: async (values) => {
       setIsPending(true);
+
       try {
-        const res = await axios.post(
-          "https://ecommerce.routemisr.com/api/v1/auth/signin",
-          values,
+        await new Promise((resolve) => setTimeout(resolve, 800)); //  API delay
+        const adminFound = admins.find(
+          (admin) =>
+            admin.username === values.username &&
+            admin.password === values.password,
         );
 
-        // حفظ التوكن في localStorage و context
-        localStorage.setItem("token", res.data.token);
-        setUseToken(res.data.token);
+        if (adminFound) {
+          localStorage.setItem("admin", "true");
+          localStorage.setItem("adminName", adminFound.username);
 
-        setIsSuccess(true);
-        setErrorMsg(null);
+          setIsSuccess(true);
+          setErrorMsg(null);
 
-        // بعد تسجيل الدخول، نوجه المستخدم للصفحة الرئيسية
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } catch (err) {
-        setErrorMsg(err.response?.data?.message || "Error occurred");
+          setTimeout(() => {
+            navigate("/admin");
+          }, 2000);
+        } else {
+          setErrorMsg("Wrong username or password");
+          setIsSuccess(false);
+        }
+      } catch {
+        setErrorMsg("Something went wrong");
+        setIsSuccess(false);
       } finally {
         setIsPending(false);
       }
@@ -64,40 +68,45 @@ export default function Login() {
         className="w-full max-w-md bg-white/40 dark:bg-gray-800/40 backdrop-blur-md p-6 rounded-lg shadow-md"
       >
         <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">
-          Login
+          Admin Login
         </h1>
 
         {isSuccess && (
           <div className="p-2 mb-4 text-sm text-green-700 rounded bg-green-100">
-            Success!
+            Admin login success!
           </div>
         )}
+
         {errorMsg && (
           <div className="p-2 mb-4 text-sm text-red-700 rounded bg-red-100">
             {errorMsg}
           </div>
         )}
 
-        {/* Email */}
+        {/* Username */}
         <div className="mb-5">
           <label
-            htmlFor="email"
+            htmlFor="username"
             className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
           >
-            Email
+            Username
           </label>
+
           <input
-            id="email"
-            type="email"
-            name="email"
-            value={formik.values.email}
+            id="username"
+            type="text"
+            name="username"
+            value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            placeholder="user@example.com"
+            placeholder="Enter username"
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
           />
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-sm text-red-600 mt-1">{formik.errors.email}</p>
+
+          {formik.touched.username && formik.errors.username && (
+            <p className="text-sm text-red-600 mt-1">
+              {formik.errors.username}
+            </p>
           )}
         </div>
 
@@ -109,6 +118,7 @@ export default function Login() {
           >
             Password
           </label>
+
           <div className="relative">
             <input
               id="password"
@@ -120,6 +130,7 @@ export default function Login() {
               placeholder="********"
               className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 dark:focus:border-blue-500"
             />
+
             <div
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-300"
@@ -127,21 +138,12 @@ export default function Login() {
               {showPassword ? "🙈" : "👁️"}
             </div>
           </div>
+
           {formik.touched.password && formik.errors.password && (
             <p className="text-sm text-red-600 mt-1">
               {formik.errors.password}
             </p>
           )}
-        </div>
-
-        {/* Forgot password */}
-        <div className="text-right mb-4">
-          <Link
-            to="/forgitpassword"
-            className="text-sm text-blue-700 hover:underline"
-          >
-            Forgot password?
-          </Link>
         </div>
 
         {/* Submit */}
@@ -150,29 +152,8 @@ export default function Login() {
           disabled={isPending}
           className="w-full py-2.5 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 disabled:opacity-50 flex justify-center items-center"
         >
-          {!isPending ? (
-            "Login"
-          ) : (
-            <ColorRing
-              visible={true}
-              height="24"
-              width="24"
-              ariaLabel="loading"
-              colors={["#fff", "#fff", "#fff", "#fff", "#fff"]}
-            />
-          )}
+          {isPending ? "Loading..." : "Login"}
         </button>
-
-        {/* Register link */}
-        <p className="text-sm text-center text-gray-700 dark:text-gray-200 mt-4">
-          Dont have an account?{" "}
-          <Link
-            to="/register"
-            className="font-medium text-blue-700 dark:text-pink-300 hover:underline"
-          >
-            Register
-          </Link>
-        </p>
       </form>
     </section>
   );

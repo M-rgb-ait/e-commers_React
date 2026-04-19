@@ -9,7 +9,7 @@ export default function GallerySection() {
   ];
 
   return (
-    <main className="mb-12 mt-12 px-4 py-8">
+    <main className="mb-8 mt-12 px-4 py-8">
       {/* Title */}
       <div className="relative mb-10 text-center">
         <h2 className="text-sm md:text-base font-bold uppercase tracking-[4px] text-pink-500">

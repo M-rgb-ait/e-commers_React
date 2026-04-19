@@ -9,7 +9,7 @@ export default function ImagesSection() {
   ];
 
   return (
-    <main className="mt-28 px-4">
+    <main className=" px-4">
       <div className="mt-10 rounded-2xl bg-red-50 dark:bg-zinc-700 py-12 px-6">
         {/* Title */}
         <h3 className="mb-10 text-center text-3xl md:text-4xl font-bold text-red-700 dark:text-pink-200">

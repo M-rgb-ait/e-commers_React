@@ -10,10 +10,12 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  if (!useToken) return null; // يخفي الهيدر كله لو مش عامل تسجيل دخول
+
   function handleLogout() {
     localStorage.removeItem("token");
     setUseToken(null);
-    setMenuOpen(false); // تغلق القائمة عند تسجيل الخروج
+    setMenuOpen(false);
     navigate("/Login");
   }
 

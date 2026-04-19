@@ -1,14 +1,24 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white pt-10 pb-6 mt-20">
+    <footer className="bg-gray-900 text-white pt-10 pb-6">
       <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
         {/* Store Info */}
         <div>
           <h2 className="text-xl font-bold mb-4">Tafaoil</h2>
+
           <p className="text-sm text-gray-300">
             Your trusted online store for quality products and fast delivery
             across the globe.
           </p>
+
+          <Link
+            to="/admin"
+            className="text-sm text-blue-400 hover:underline mt-3 inline-block"
+          >
+            Admin
+          </Link>
         </div>
 
         {/* Contact Info */}
