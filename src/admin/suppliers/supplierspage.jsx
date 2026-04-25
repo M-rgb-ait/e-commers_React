@@ -101,17 +101,17 @@ export default function SuppliersPage() {
       <h2 className="text-2xl font-bold mb-4">Suppliers Management</h2>
 
       {/* 🔍 Search + Filter */}
-      <div className="flex gap-3 mb-4">
+      <div className="flex flex-col md:flex-row gap-3 mb-4">
         <input
           type="text"
           placeholder="Search by name or email..."
-          className="border p-2 w-1/3 rounded"
+          className="border p-2 w-full md:w-1/3 rounded"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded w-full md:w-auto"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         >
@@ -132,61 +132,66 @@ export default function SuppliersPage() {
         + Add Supplier
       </button>
 
-      {/* Table */}
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200 text-sm">
-            <th>Name</th>
-            <th>Email</th>
-            <th>Type</th>
-            <th>Country</th>
-            <th>Supplies</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filteredSuppliers.map((sup) => (
-            <tr key={sup.id} className="text-center border-t hover:bg-gray-50">
-              <td>{sup.name}</td>
-              <td>{sup.email}</td>
-              <td>{sup.type === "local" ? "Local 🇪🇬" : "Foreign 🌍"}</td>
-              <td>{sup.country}</td>
-
-              {/* Supplies */}
-              <td>
-                {sup.supplies?.map((item, i) => (
-                  <span
-                    key={i}
-                    className="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded m-1 text-xs"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </td>
-
-              {/* Actions */}
-              <td className="space-x-2">
-                <button
-                  onClick={() => openEdit(sup)}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(sup.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      {/* 🟢 TABLE WRAPPER RESPONSIVE FIX */}
+      <div className="w-full overflow-x-auto">
+        <table className=" w-full border">
+          <thead>
+            <tr className="bg-gray-200 text-sm">
+              <th>Name</th>
+              <th>Email</th>
+              <th>Type</th>
+              <th>Country</th>
+              <th>Supplies</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
-      {/* 🟣 Modal */}
+          <tbody>
+            {filteredSuppliers.map((sup) => (
+              <tr
+                key={sup.id}
+                className="text-center border-t hover:bg-gray-50"
+              >
+                <td>{sup.name}</td>
+                <td>{sup.email}</td>
+                <td>{sup.type === "local" ? "Local 🇪🇬" : "Foreign 🌍"}</td>
+                <td>{sup.country}</td>
+
+                {/* Supplies */}
+                <td>
+                  {sup.supplies?.map((item, i) => (
+                    <span
+                      key={i}
+                      className="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded m-1 text-xs"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </td>
+
+                {/* Actions */}
+                <td className="space-x-2">
+                  <button
+                    onClick={() => openEdit(sup)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(sup.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 🟣 Modal (زي ما هو) */}
       {open && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
           <div className="bg-white p-6 rounded w-96">

@@ -107,55 +107,56 @@ export default function WarehouseBalancesPage() {
       >
         + Add Balance
       </button>
-
       {/* Table */}
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200 text-sm">
-            <th>Product</th>
-            <th>Warehouse</th>
-            <th>Quantity</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filtered.map((b) => (
-            <tr key={b.id} className="text-center border-t">
-              <td>{b.product}</td>
-              <td>{b.warehouse}</td>
-              <td>{b.quantity}</td>
-
-              <td>
-                <span
-                  className={`px-2 py-1 rounded text-white text-xs ${
-                    b.quantity > 0 ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {b.quantity > 0 ? "In Stock" : "Empty"}
-                </span>
-              </td>
-
-              <td className="space-x-2">
-                <button
-                  onClick={() => openEdit(b)}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(b.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[800px] w-full border-collapse border">
+          <thead>
+            <tr className="bg-gray-200 text-sm">
+              <th className="p-2 border">Product</th>
+              <th className="p-2 border">Warehouse</th>
+              <th className="p-2 border">Quantity</th>
+              <th className="p-2 border">Status</th>
+              <th className="p-2 border">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {filtered.map((b) => (
+              <tr key={b.id} className="text-center border-t">
+                <td className="p-2 border">{b.product}</td>
+                <td className="p-2 border">{b.warehouse}</td>
+                <td className="p-2 border font-bold">{b.quantity}</td>
+
+                <td className="p-2 border">
+                  <span
+                    className={`px-2 py-1 rounded text-white text-xs ${
+                      b.quantity > 0 ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {b.quantity > 0 ? "In Stock" : "Empty"}
+                  </span>
+                </td>
+
+                <td className="p-2 border space-x-2">
+                  <button
+                    onClick={() => openEdit(b)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(b.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Modal */}
       {open && (

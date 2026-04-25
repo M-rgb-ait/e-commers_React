@@ -134,60 +134,65 @@ export default function ProductsPage() {
       </button>
 
       {/* Table */}
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200 text-sm">
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Status</th>
-            <th>Warehouse</th>
-            <th>Supplier</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filtered.map((p) => (
-            <tr key={p.id} className="text-center border-t">
-              <td>{p.name}</td>
-              <td>{p.category}</td>
-              <td>${p.price}</td>
-              <td>{p.stock}</td>
-
-              <td>
-                <span
-                  className={`px-2 py-1 rounded text-white text-xs ${
-                    p.stock > 0 ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {p.stock > 0 ? "active" : "inactive"}
-                </span>
-              </td>
-
-              <td>{p.warehouse}</td>
-              <td>{p.supplier}</td>
-
-              <td className="space-x-2">
-                <button
-                  onClick={() => openEdit(p)}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(p.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      {/* Table */}
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[900px] w-full border-collapse border">
+          <thead>
+            <tr className="bg-gray-200 text-sm">
+              <th className="p-2 border">Name</th>
+              <th className="p-2 border">Category</th>
+              <th className="p-2 border">Price</th>
+              <th className="p-2 border">Stock</th>
+              <th className="p-2 border">Status</th>
+              <th className="p-2 border">Warehouse</th>
+              <th className="p-2 border">Supplier</th>
+              <th className="p-2 border">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {filtered.map((p) => (
+              <tr key={p.id} className="text-center border-t">
+                <td className="p-2 border">{p.name}</td>
+                <td className="p-2 border">{p.category}</td>
+                <td className="p-2 border">${p.price}</td>
+                <td className="p-2 border">{p.stock}</td>
+
+                <td className="p-2 border">
+                  <span
+                    className={`px-2 py-1 rounded text-white text-xs ${
+                      p.stock > 0 ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {p.stock > 0 ? "active" : "inactive"}
+                  </span>
+                </td>
+
+                <td className="p-2 border">{p.warehouse}</td>
+                <td className="p-2 border">{p.supplier}</td>
+
+                <td className="p-2 border">
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => openEdit(p)}
+                      className="bg-yellow-500 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Modal */}
       {open && (

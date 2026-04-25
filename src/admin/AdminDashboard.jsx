@@ -3,6 +3,8 @@ import SuppliersPage from "./suppliers/supplierspage";
 import ProductsPage from "./products/ProductsPage";
 import WarehousesPage from "./warehouses/WarehousesPage";
 import WarehouseBalancesPage from "./WarehouseBalances/WarehouseBalancesPage";
+import DashboardPage from "./DashboardPage";
+// import StockMovementPage from "./StockMovement";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -23,6 +25,8 @@ export default function AdminDashboard() {
       <ProductsPage />
       <WarehousesPage />
       <WarehouseBalancesPage />
+      <DashboardPage />
+      {/* <StockMovementPage /> */}
     </div>
   );
 }

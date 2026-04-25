@@ -96,18 +96,18 @@ export default function WarehousesPage() {
       <h2 className="text-2xl font-bold mb-4">Warehouses Management</h2>
 
       {/* 📊 Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-green-100 p-4 rounded text-center shadow">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6">
+        <div className="bg-green-100 p-4 rounded text-center shadow-sm">
           <p className="text-sm text-gray-600">Active Warehouses</p>
           <p className="text-2xl font-bold text-green-700">{activeCount}</p>
         </div>
 
-        <div className="bg-red-100 p-4 rounded text-center shadow">
+        <div className="bg-red-100 p-4 rounded text-center shadow-sm">
           <p className="text-sm text-gray-600">Inactive Warehouses</p>
           <p className="text-2xl font-bold text-red-700">{inactiveCount}</p>
         </div>
 
-        <div className="bg-blue-100 p-4 rounded text-center shadow">
+        <div className="bg-blue-100 p-4 rounded text-center shadow-sm">
           <p className="text-sm text-gray-600">Total Warehouses</p>
           <p className="text-2xl font-bold text-blue-700">{totalCount}</p>
         </div>
@@ -131,57 +131,59 @@ export default function WarehousesPage() {
       </button>
 
       {/* Table */}
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200 text-sm">
-            <th>Name</th>
-            <th>Location</th>
-            <th>Capacity</th>
-            <th>Used</th>
-            <th>Manager</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filtered.map((w) => (
-            <tr key={w.id} className="text-center border-t">
-              <td>{w.name}</td>
-              <td>{w.location}</td>
-              <td>{w.capacity}</td>
-              <td>{w.used}</td>
-              <td>{w.manager}</td>
-
-              <td>
-                <span
-                  className={`px-2 py-1 rounded text-white text-xs ${
-                    w.status === "active" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {w.status}
-                </span>
-              </td>
-
-              <td className="space-x-2">
-                <button
-                  onClick={() => openEdit(w)}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(w.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[900px] w-full border-collapse border">
+          <thead>
+            <tr className="bg-gray-200 text-sm">
+              <th className="p-2 border">Name</th>
+              <th className="p-2 border">Location</th>
+              <th className="p-2 border">Capacity</th>
+              <th className="p-2 border">Used</th>
+              <th className="p-2 border">Manager</th>
+              <th className="p-2 border">Status</th>
+              <th className="p-2 border">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {filtered.map((w) => (
+              <tr key={w.id} className="text-center border-t">
+                <td className="p-2 border">{w.name}</td>
+                <td className="p-2 border">{w.location}</td>
+                <td className="p-2 border">{w.capacity}</td>
+                <td className="p-2 border">{w.used}</td>
+                <td className="p-2 border">{w.manager}</td>
+
+                <td className="p-2 border">
+                  <span
+                    className={`px-2 py-1 rounded text-white text-xs ${
+                      w.status === "active" ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {w.status}
+                  </span>
+                </td>
+
+                <td className="p-2 border space-x-2">
+                  <button
+                    onClick={() => openEdit(w)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(w.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Modal */}
       {open && (
