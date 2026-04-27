@@ -42,19 +42,19 @@ export default function OrdersPage() {
     setOpen(false);
   };
 
-  // ❌ Delete
+  //  Delete
   const handleDelete = (id) => {
     const updated = deleteOrder(id);
     setOrders(updated);
   };
 
-  // 🚚 Ship
+  //  Ship
   const handleShip = (id) => {
     const updated = shipOrder(id);
     setOrders(updated);
   };
 
-  // 📦 Deliver
+  //  Deliver
   const handleDeliver = (id) => {
     const updated = deliverOrder(id);
     setOrders(updated);
