@@ -67,7 +67,7 @@ export default function DashboardPage() {
   const inStock = balances.filter((b) => Number(b.quantity) > 5);
 
   return (
-    <div className="p-6">
+    <div className="w-full">
       <h2 className="text-3xl font-bold mb-6">Admin Dashboard</h2>
 
       {/* 📊 Stats */}

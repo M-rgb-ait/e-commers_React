@@ -17,16 +17,46 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div style={{ padding: "30px", margin: "70px" }}>
-      <h2>Admin Dashboard</h2>
-      <button onClick={logout}>Logout</button>
-      <p>Welcome {adminName}</p>
-      <SuppliersPage />
-      <ProductsPage />
-      <WarehousesPage />
-      <WarehouseBalancesPage />
-      <DashboardPage />
-      {/* <StockMovementPage /> */}
+    <div className="max-w-7xl mx-auto px-3 py-3 mt-20">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-800">Admin Dashboard</h2>
+          <p className="text-gray-500 mt-1">
+            Welcome, <span className="font-semibold">{adminName}</span>
+          </p>
+        </div>
+
+        <button
+          onClick={logout}
+          className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg shadow transition"
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* Sections */}
+      <div className="space-y-10">
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <SuppliersPage />
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <ProductsPage />
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <WarehousesPage />
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <WarehouseBalancesPage />
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <DashboardPage />
+        </div>
+      </div>
     </div>
   );
 }

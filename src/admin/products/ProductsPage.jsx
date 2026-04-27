@@ -100,7 +100,7 @@ export default function ProductsPage() {
   );
 
   return (
-    <div className="p-6">
+    <div className="w-full">
       <h2 className="text-2xl font-bold mb-4">Products Management</h2>
 
       {/* 📊 Stats */}

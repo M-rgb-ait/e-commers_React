@@ -88,7 +88,7 @@ export default function WarehouseBalancesPage() {
   );
 
   return (
-    <div className="p-6">
+    <div className="w-full">
       <h2 className="text-2xl font-bold mb-4">Warehouse Balances</h2>
 
       {/* Search */}

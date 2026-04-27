@@ -97,7 +97,7 @@ export default function SuppliersPage() {
   });
 
   return (
-    <div className="p-6">
+    <div className="w-full">
       <h2 className="text-2xl font-bold mb-4">Suppliers Management</h2>
 
       {/* 🔍 Search + Filter */}
@@ -134,7 +134,7 @@ export default function SuppliersPage() {
 
       {/* 🟢 TABLE WRAPPER RESPONSIVE FIX */}
       <div className="w-full overflow-x-auto">
-        <table className=" w-full border">
+        <table className="min-w-full border">
           <thead>
             <tr className="bg-gray-200 text-sm">
               <th>Name</th>
@@ -170,20 +170,23 @@ export default function SuppliersPage() {
                 </td>
 
                 {/* Actions */}
-                <td className="space-x-2">
-                  <button
-                    onClick={() => openEdit(sup)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded"
-                  >
-                    Edit
-                  </button>
 
-                  <button
-                    onClick={() => handleDelete(sup.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                <td className="p-2 border">
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => openEdit(sup)}
+                      className="bg-yellow-500 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(sup.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
