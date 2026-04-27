@@ -6,7 +6,6 @@ import WarehouseBalancesPage from "./WarehouseBalances/WarehouseBalancesPage";
 import DashboardPage from "./DashboardPage";
 import ShippingCompaniesPage from "./shipping/ShippingCompaniesPage";
 import OrdersPage from "./orders/OrdersPage";
-// import StockMovementPage from "./StockMovement";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
