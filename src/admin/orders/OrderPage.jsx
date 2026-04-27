@@ -1,7 +1,7 @@
 import { useState } from "react";
 import initialOrders from "./initialOrders";
-import { createOrder, deleteOrder } from "./orders.service";
-import { deliverOrder, shipOrder } from "./shipping.service";
+import { createOrder, deleteOrder } from "./allfun";
+import { deliverOrder, shipOrder } from "./shipping";
 
 const getData = () => {
   const data = localStorage.getItem("orders");

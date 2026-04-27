@@ -1,4 +1,4 @@
-import { updateOrderStatus } from "./orders.service";
+import { updateOrderStatus } from "./allfun";
 
 // 🚚 Assign shipping company automatically
 export const assignShippingCompany = (order) => {
