@@ -154,7 +154,7 @@ export default function SuppliersPage() {
               >
                 <td>{sup.name}</td>
                 <td>{sup.email}</td>
-                <td>{sup.type === "local" ? "Local 🇪🇬" : "Foreign 🌍"}</td>
+                <td>{sup.type === "local" ? "Local 🇪🇬" : "Foreign"}</td>
                 <td>{sup.country}</td>
 
                 {/* Supplies */}
