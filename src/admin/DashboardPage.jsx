@@ -33,8 +33,10 @@ export default function DashboardPage() {
   const totalSuppliers = suppliers.length;
   const totalWarehouses = warehouses.length;
 
-  const totalStock = balances.reduce((sum, b) => sum + Number(b.quantity), 0);
-
+  const totalStock = balances.reduce((sum, b) => {
+    const qty = parseInt(b.quantity || 0, 10);
+    return sum + (isNaN(qty) ? 0 : qty);
+  }, 0);
   // 🏬 Warehouse totals
   const warehouseTotals = balances.reduce((acc, b) => {
     acc[b.warehouse] = (acc[b.warehouse] || 0) + Number(b.quantity);
@@ -68,7 +70,7 @@ export default function DashboardPage() {
 
   return (
     <div className="w-full">
-      <h2 className="text-3xl font-bold mb-6">Admin Dashboard</h2>
+      <h2 className="text-3xl font-bold mb-6">Inventory Management System</h2>
 
       {/* 📊 Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">

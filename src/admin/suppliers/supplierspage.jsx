@@ -95,6 +95,14 @@ export default function SuppliersPage() {
 
     return matchSearch && matchFilter;
   });
+  const totalSuppliers = suppliers.length;
+
+  // 🟢 Local vs Foreign
+  const localCount = suppliers.filter((s) => s.type === "local").length;
+  const foreignCount = suppliers.filter((s) => s.type === "foreign").length;
+
+  // 🌍 Countries count
+  const countryCount = new Set(suppliers.map((s) => s.country)).size;
 
   return (
     <div className="w-full">
@@ -131,7 +139,28 @@ export default function SuppliersPage() {
       >
         + Add Supplier
       </button>
+      {/* 📊 Analytics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-blue-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Total Suppliers</p>
+          <p className="text-2xl font-bold">{totalSuppliers}</p>
+        </div>
 
+        <div className="bg-green-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Local</p>
+          <p className="text-2xl font-bold">{localCount}</p>
+        </div>
+
+        <div className="bg-purple-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Foreign</p>
+          <p className="text-2xl font-bold">{foreignCount}</p>
+        </div>
+
+        <div className="bg-yellow-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Countries</p>
+          <p className="text-2xl font-bold">{countryCount}</p>
+        </div>
+      </div>
       {/* 🟢 TABLE WRAPPER RESPONSIVE FIX */}
       <div className="w-full overflow-x-auto">
         <table className="min-w-full border">

@@ -4,6 +4,8 @@ import ProductsPage from "./products/ProductsPage";
 import WarehousesPage from "./warehouses/WarehousesPage";
 import WarehouseBalancesPage from "./WarehouseBalances/WarehouseBalancesPage";
 import DashboardPage from "./DashboardPage";
+import ShippingCompaniesPage from "./shipping/ShippingCompaniesPage";
+import OrdersPage from "./orders/OrdersPage";
 // import StockMovementPage from "./StockMovement";
 
 export default function AdminDashboard() {
@@ -17,7 +19,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-3 py-3 mt-20">
+    <div className="max-w-7xl mx-auto px-3 py-3 mt-2">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
@@ -55,6 +57,12 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-xl shadow p-3 border">
           <DashboardPage />
+        </div>
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <ShippingCompaniesPage />
+        </div>
+        <div className="bg-white rounded-xl shadow p-3 border">
+          <OrdersPage />
         </div>
       </div>
     </div>

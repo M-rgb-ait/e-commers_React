@@ -86,6 +86,17 @@ export default function WarehouseBalancesPage() {
       b.product.toLowerCase().includes(search.toLowerCase()) ||
       b.warehouse.toLowerCase().includes(search.toLowerCase()),
   );
+  const totalItems = balances.length;
+
+  // 📦 Total stock quantity
+  const totalQuantity = balances.reduce(
+    (sum, b) => sum + Number(b.quantity || 0),
+    0,
+  );
+
+  // 🟢 In stock / Empty
+  const inStockCount = balances.filter((b) => b.quantity > 0).length;
+  const emptyCount = balances.filter((b) => b.quantity === 0).length;
 
   return (
     <div className="w-full">
@@ -107,6 +118,30 @@ export default function WarehouseBalancesPage() {
       >
         + Add Balance
       </button>
+
+      {/* 📊 Analytics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-blue-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Total Items</p>
+          <p className="text-2xl font-bold">{totalItems}</p>
+        </div>
+
+        <div className="bg-green-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Total Quantity</p>
+          <p className="text-2xl font-bold">{totalQuantity}</p>
+        </div>
+
+        <div className="bg-purple-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">In Stock</p>
+          <p className="text-2xl font-bold">{inStockCount}</p>
+        </div>
+
+        <div className="bg-red-100 p-4 rounded text-center">
+          <p className="text-sm text-gray-600">Empty</p>
+          <p className="text-2xl font-bold">{emptyCount}</p>
+        </div>
+      </div>
+
       {/* Table */}
       <div className="w-full overflow-x-auto">
         <table className="min-w-[800px] w-full border-collapse border">
